@@ -1,9 +1,5 @@
 
 # Project Title
-
-A brief description of what this project does and who it's for
-
-
 # On-Premise Data Pipeline and Machine Learning deployment
 
 A brief description of what this project does and who it's for
