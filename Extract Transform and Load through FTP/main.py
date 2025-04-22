@@ -61,7 +61,7 @@ if __name__ == "__main__":
     if param == "manual":
         pipeline()
     elif param == "schedule":
-        schedule.every().day.at("19:02").do(pipeline)
+        schedule.every().day.at("19:04").do(pipeline)
 
         while True:
             schedule.run_pending()
