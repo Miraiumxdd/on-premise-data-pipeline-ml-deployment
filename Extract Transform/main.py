@@ -1,7 +1,6 @@
 import sys
 import json
 import time
-import concurrent.futures
 import schedule
 import pandas as pd
 from os import environ, remove
@@ -13,7 +12,6 @@ def get_ftp() -> FTP_TLS:
     FTPHOST = environ["FTPHOST"]
     FTPUSER = environ["FTPUSER"]
     FTPPASS = environ["FTPPASSWORD"]
-    FTPPORT = environ["FTPPORT"]
 
     #Return authenticated FTP
     ftp = FTP_TLS(FTPHOST, FTPUSER, FTPPASS)
@@ -38,7 +36,7 @@ def read_csv(config: dict) -> pd.DataFrame:
 
 def pipeline(): 
     # Load source config
-    with open("config.json", "rb") as fp:
+    with open(".\Extract Transform\config.json", "rb") as fp:
         config = json.load(fp)
 
     ftp = get_ftp()
@@ -59,10 +57,15 @@ def pipeline():
 
 if __name__ == "__main__":
 
-    # pipeline()
-    
-    schedule.every().day.at("17:56").do(pipeline)
+    param = sys.argv[1]
+    if param == "manual":
+        pipeline()
+    elif param == "schedule":
+        schedule.every().day.at("19:02").do(pipeline)
 
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+    else:
+        print("Invalid parameter. Use 'manual' or 'schedule'.")
+        sys.exit(1)
