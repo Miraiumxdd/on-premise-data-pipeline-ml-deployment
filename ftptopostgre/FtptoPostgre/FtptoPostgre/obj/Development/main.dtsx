@@ -1,0 +1,1871 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="4/23/2025 9:29:23 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="JFRANCO"
+  DTS:CreatorName="JFRANCO\franc"
+  DTS:DTSID="{95F99FD5-A861-4457-853F-8216A00B4A01}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5685.0"
+  DTS:LocaleID="13321"
+  DTS:ObjectName="main"
+  DTS:PackageType="5"
+  DTS:VersionBuild="29"
+  DTS:VersionGUID="{F69A3AF8-9558-4AEF-907C-69C6D5A73890}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[FTP Connection Manager 2]"
+      DTS:CreationName="FTP"
+      DTS:DTSID="{0AE6F161-3C85-44B2-96F7-49CFA27E5331}"
+      DTS:ObjectName="FTP Connection Manager 2">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="172.31.7.82:21">
+          <DTS:FtpConnection
+            DTS:ServerName="172.31.7.82"
+            DTS:ServerUserName="ftpuser"
+            DTS:UsePassiveMode="True">
+            <DTS:Property
+              DTS:Name="ServerPassword"
+              Sensitive="1"
+              Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAzm1OUZYYoEWQ4umSndoOSgAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAACW08w+kDUyAPMRTgDcCSeF5Q0Q1ZLkJa9IbAbR1RcXngAAAAAOgAAAAAIAACAAAABrUjFFgQDC9y9+3mFcvxEoPd6lUJOc/k0XaN9gnlbdYSAAAACo2e45ZaceiTYktxE7I2mlRZ+UQbmKJJLVMlL8UWSYK0AAAAANfcIpWAlFbegzvva9FwEpGOKEFA0XwOmukn7ZVRDLV5q65dh8gQEeRaePW9bHBOisP4bNa/mqbLyMxnVssech</DTS:Property>
+          </DTS:FtpConnection>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{F3B2F01A-C832-4BF1-A7B4-E2A467B97148}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="extracts_folder">
+      <DTS:VariableValue
+        DTS:DataType="8">C:\Eko Files\data-pipeline-to-ml-deployment\ftptopostgre\Extracts</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{8985B3CE-4176-44AD-AFDE-139D8FD9BC5B}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="ftp_new_folder">
+      <DTS:VariableValue
+        DTS:DataType="8">/home/ftpuser/OFAC_*.csv</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Download OFAC CSV files from FTP"
+      DTS:CreationName="Microsoft.FtpTask"
+      DTS:Description="FTP Task"
+      DTS:DTSID="{5D5F8A14-81FE-4F37-A32F-11A6A9B3DBD7}"
+      DTS:ExecutableType="Microsoft.FtpTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Download OFAC CSV files from FTP"
+      DTS:TaskContact="FTP Task; Microsoft Corporation; SQL Server 2022; (c) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <FtpData
+          ConnectionName="{0AE6F161-3C85-44B2-96F7-49CFA27E5331}"
+          TaskOperationType="Receive"
+          TaskIsLocalPathVar="True"
+          TaskLocalPath="User::extracts_folder"
+          TaskIsRemotePathVar="True"
+          TaskRemotePath="User::ftp_new_folder"
+          TaskOverwriteDest="True" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Parallel Execution of data flow task"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{7DB0A3C6-9B75-48B5-804D-6C8CDACADF31}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Parallel Execution of data flow task">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{2bd341bd-4372-4dec-86e3-9fe66f8556aa}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="OFAC ADD CSV to Postgre"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File"
+                  componentClassID="Microsoft.FlatFileSource"
+                  contactInfo="Flat File Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+                  description="Flat File Source"
+                  localeId="13321"
+                  name="CSV File"
+                  usesDispositions="true"
+                  version="1">
+                  <properties>
+                    <property
+                      dataType="System.Boolean"
+                      description="Specifies whether zero-length columns are treated as null."
+                      name="RetainNulls">true</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of an output column containing the file name. If no name is specified, no output column containing the file name will be generated."
+                      name="FileNameColumnName"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Connections[FlatFileConnection]"
+                      connectionManagerID="{6208C7C4-CBFC-4AAC-9E11-0894EA2D9F15}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[CSV OFAC ADD]"
+                      name="FlatFileConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output]"
+                      name="Flat File Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[ent_num]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[ent_num]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[ent_num]"
+                          name="ent_num"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[add_num]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[add_num]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[add_num]"
+                          name="add_num"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[address]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[address]"
+                          length="750"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[address]"
+                          name="address"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[complete_address]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[complete_address]"
+                          length="116"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[complete_address]"
+                          name="complete_address"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[country]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[country]"
+                          length="250"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[country]"
+                          name="country"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[add_remarks]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[add_remarks]"
+                          length="200"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[add_remarks]"
+                          name="add_remarks"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[ent_num]"
+                          dataType="i4"
+                          name="ent_num" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[add_num]"
+                          dataType="i4"
+                          name="add_num" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[address]"
+                          codePage="1252"
+                          dataType="str"
+                          length="750"
+                          name="address" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[complete_address]"
+                          codePage="1252"
+                          dataType="str"
+                          length="116"
+                          name="complete_address" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[country]"
+                          codePage="1252"
+                          dataType="str"
+                          length="250"
+                          name="country" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[add_remarks]"
+                          codePage="1252"
+                          dataType="str"
+                          length="200"
+                          name="add_remarks" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Error Output]"
+                      isErrorOut="true"
+                      name="Flat File Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[Flat File Source Error Output Column]"
+                          codePage="1252"
+                          dataType="text"
+                          description="Flat File Source Error Output Column"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[Flat File Source Error Output Column]"
+                          name="Flat File Source Error Output Column" />
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table"
+                  componentClassID="Microsoft.SSISODBCDst"
+                  contactInfo="ODBC Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+                  description="ODBC Destination"
+                  name="OFAC Table"
+                  usesDispositions="true"
+                  version="1">
+                  <properties>
+                    <property
+                      dataType="System.String"
+                      description="The name of the table to be fetched."
+                      expressionType="Notify"
+                      name="TableName">"public"."stg_ofac_add"</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specify the number of rows fetched per batch."
+                      expressionType="Notify"
+                      name="BatchSize">1000</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of rows inserted under the same transaction."
+                      expressionType="Notify"
+                      name="TransactionSize">1000</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Determines the chunk size allocation for LOB columns"
+                      expressionType="Notify"
+                      name="LobChunkSize">32768</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds to wait for an SQL statement to execute before returning to the application."
+                      expressionType="Notify"
+                      name="StatementTimeout">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The code page to use when code page information is unavailable from the data source."
+                      expressionType="Notify"
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The method used for inserting data. Possible values are 'Batch' or 'Row by row'."
+                      expressionType="Notify"
+                      name="InsertMethod">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The ODBC C data type for binding numeric data."
+                      expressionType="Notify"
+                      name="BindNumericAs">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Determines how the component would bind columns of (multi)-byte string types (i.e., SQL_CHAR, SQL_VARCHAR, SQL_LONGVARCHAR). The options are: Unicode (SQL_C_WCHAR) and ANSI (SQL_C_CHAR)."
+                      expressionType="Notify"
+                      name="BindCharColumnsAs">0</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Connections[ODBCConnection]"
+                      connectionManagerID="{594C551A-C34F-4954-A1AE-62D2226FDB00}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[PSQL ODBC 64]"
+                      description="The ODBC runtime connection used to access the database."
+                      name="ODBCConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="ODBC Destination Input"
+                      truncationRowDisposition="FailComponent">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[ent_num]"
+                          cachedDataType="i4"
+                          cachedName="ent_num"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[ent_num]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[ent_num]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[add_num]"
+                          cachedDataType="i4"
+                          cachedName="add_num"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[add_num]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[add_num]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[address]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="750"
+                          cachedName="address"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[address]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[address]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[complete_address]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="116"
+                          cachedName="complete_address"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[city/state/province/postal_code]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[complete_address]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[add_remarks]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="200"
+                          cachedName="add_remarks"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[add_remarks]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[add_remarks]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[country]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="250"
+                          cachedName="country"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[country]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[country]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[ent_num]"
+                          dataType="i4"
+                          name="ent_num" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[add_num]"
+                          dataType="i4"
+                          name="add_num" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[address]"
+                          dataType="wstr"
+                          length="750"
+                          name="address" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[city/state/province/postal_code]"
+                          dataType="wstr"
+                          length="116"
+                          name="city/state/province/postal_code" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[country]"
+                          dataType="wstr"
+                          length="250"
+                          name="country" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[add_remarks]"
+                          dataType="wstr"
+                          length="200"
+                          name="add_remarks" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="ODBC Destination Error Output"
+                      synchronousInputId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre.Paths[Flat File Source Output]"
+                  endId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input]"
+                  name="Flat File Source Output"
+                  startId="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File.Outputs[Flat File Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{6db82957-401b-402c-a2ad-b23b3c3f78de}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="OFAC ALT CSV to Postgre"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File"
+                  componentClassID="Microsoft.FlatFileSource"
+                  contactInfo="Flat File Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+                  description="Flat File Source"
+                  localeId="13321"
+                  name="CSV File"
+                  usesDispositions="true"
+                  version="1">
+                  <properties>
+                    <property
+                      dataType="System.Boolean"
+                      description="Specifies whether zero-length columns are treated as null."
+                      name="RetainNulls">true</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of an output column containing the file name. If no name is specified, no output column containing the file name will be generated."
+                      name="FileNameColumnName"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Connections[FlatFileConnection]"
+                      connectionManagerID="{62E03D56-99E5-4182-ACFC-ECA81BE147FA}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[CSV OFAC ALT]"
+                      name="FlatFileConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output]"
+                      name="Flat File Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[ent_num]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[ent_num]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[ent_num]"
+                          name="ent_num"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[alt_num]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[alt_num]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[alt_num]"
+                          name="alt_num"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[alt_type]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[alt_type]"
+                          length="8"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[alt_type]"
+                          name="alt_type"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[alt_name]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[alt_name]"
+                          length="350"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[alt_name]"
+                          name="alt_name"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[alt_remarks]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[alt_remarks]"
+                          length="200"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[alt_remarks]"
+                          name="alt_remarks"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[ent_num]"
+                          dataType="i4"
+                          name="ent_num" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[alt_num]"
+                          dataType="i4"
+                          name="alt_num" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[alt_type]"
+                          codePage="1252"
+                          dataType="str"
+                          length="8"
+                          name="alt_type" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[alt_name]"
+                          codePage="1252"
+                          dataType="str"
+                          length="350"
+                          name="alt_name" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[alt_remarks]"
+                          codePage="1252"
+                          dataType="str"
+                          length="200"
+                          name="alt_remarks" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Error Output]"
+                      isErrorOut="true"
+                      name="Flat File Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[Flat File Source Error Output Column]"
+                          codePage="1252"
+                          dataType="text"
+                          description="Flat File Source Error Output Column"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[Flat File Source Error Output Column]"
+                          name="Flat File Source Error Output Column" />
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table"
+                  componentClassID="Microsoft.SSISODBCDst"
+                  contactInfo="ODBC Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+                  description="ODBC Destination"
+                  name="OFAC Table"
+                  usesDispositions="true"
+                  version="1">
+                  <properties>
+                    <property
+                      dataType="System.String"
+                      description="The name of the table to be fetched."
+                      expressionType="Notify"
+                      name="TableName">"public"."stg_ofac_alt"</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specify the number of rows fetched per batch."
+                      expressionType="Notify"
+                      name="BatchSize">1000</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of rows inserted under the same transaction."
+                      expressionType="Notify"
+                      name="TransactionSize">1000</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Determines the chunk size allocation for LOB columns"
+                      expressionType="Notify"
+                      name="LobChunkSize">32768</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds to wait for an SQL statement to execute before returning to the application."
+                      expressionType="Notify"
+                      name="StatementTimeout">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The code page to use when code page information is unavailable from the data source."
+                      expressionType="Notify"
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The method used for inserting data. Possible values are 'Batch' or 'Row by row'."
+                      expressionType="Notify"
+                      name="InsertMethod">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The ODBC C data type for binding numeric data."
+                      expressionType="Notify"
+                      name="BindNumericAs">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Determines how the component would bind columns of (multi)-byte string types (i.e., SQL_CHAR, SQL_VARCHAR, SQL_LONGVARCHAR). The options are: Unicode (SQL_C_WCHAR) and ANSI (SQL_C_CHAR)."
+                      expressionType="Notify"
+                      name="BindCharColumnsAs">0</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Connections[ODBCConnection]"
+                      connectionManagerID="{594C551A-C34F-4954-A1AE-62D2226FDB00}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[PSQL ODBC 64]"
+                      description="The ODBC runtime connection used to access the database."
+                      name="ODBCConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="ODBC Destination Input"
+                      truncationRowDisposition="FailComponent">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[ent_num]"
+                          cachedDataType="i4"
+                          cachedName="ent_num"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[ent_num]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[ent_num]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[alt_num]"
+                          cachedDataType="i4"
+                          cachedName="alt_num"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[alt_type]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[alt_num]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[alt_type]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="8"
+                          cachedName="alt_type"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[alt_name]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[alt_type]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[alt_name]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="350"
+                          cachedName="alt_name"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[alt_remarks]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[alt_name]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[alt_remarks]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="200"
+                          cachedName="alt_remarks"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[add_remarks]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[alt_remarks]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[ent_num]"
+                          dataType="i4"
+                          name="ent_num" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[alt_type]"
+                          dataType="wstr"
+                          length="8"
+                          name="alt_type" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[alt_name]"
+                          dataType="wstr"
+                          length="350"
+                          name="alt_name" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[alt_remarks]"
+                          dataType="wstr"
+                          length="200"
+                          name="alt_remarks" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[add_remarks]"
+                          dataType="wstr"
+                          length="200"
+                          name="add_remarks" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="ODBC Destination Error Output"
+                      synchronousInputId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre.Paths[Flat File Source Output]"
+                  endId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input]"
+                  name="Flat File Source Output"
+                  startId="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File.Outputs[Flat File Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{FE2D2BCA-FBC0-44CB-9890-E06D6CDC3356}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="OFAC SDN CSV to Postgre"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File"
+                  componentClassID="Microsoft.FlatFileSource"
+                  contactInfo="Flat File Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+                  description="Flat File Source"
+                  localeId="13321"
+                  name="CSV File"
+                  usesDispositions="true"
+                  version="1">
+                  <properties>
+                    <property
+                      dataType="System.Boolean"
+                      description="Specifies whether zero-length columns are treated as null."
+                      name="RetainNulls">true</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of an output column containing the file name. If no name is specified, no output column containing the file name will be generated."
+                      name="FileNameColumnName"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Connections[FlatFileConnection]"
+                      connectionManagerID="{15205417-DDD1-4619-9CB1-9BA30E214E16}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[CSV OFAC SDN]"
+                      name="FlatFileConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output]"
+                      name="Flat File Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[ent_num]"
+                          dataType="i4"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[ent_num]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[ent_num]"
+                          name="ent_num"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[sdn_Name]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[sdn_Name]"
+                          length="350"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[sdn_Name]"
+                          name="sdn_Name"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[sdn_Type]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[sdn_Type]"
+                          length="12"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[sdn_Type]"
+                          name="sdn_Type"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[program]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[program]"
+                          length="200"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[program]"
+                          name="program"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[title]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[title]"
+                          length="200"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[title]"
+                          name="title"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[call_sign]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[call_sign]"
+                          length="8"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[call_sign]"
+                          name="call_sign"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[vess_type]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[vess_type]"
+                          length="25"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[vess_type]"
+                          name="vess_type"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[tonnage]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[tonnage]"
+                          length="14"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[tonnage]"
+                          name="tonnage"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[grt]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[grt]"
+                          length="8"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[grt]"
+                          name="grt"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[vess_flag]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[vess_flag]"
+                          length="40"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[vess_flag]"
+                          name="vess_flag"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[vess_owner]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[vess_owner]"
+                          length="150"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[vess_owner]"
+                          name="vess_owner"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[remarks]"
+                          codePage="1252"
+                          dataType="str"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[remarks]"
+                          length="1000"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[remarks]"
+                          name="remarks"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                              name="FastParse">false</property>
+                            <property
+                              dataType="System.Boolean"
+                              description="Indicates whether the data is in binary format."
+                              name="UseBinaryFormat">false</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[ent_num]"
+                          dataType="i4"
+                          name="ent_num" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[sdn_Name]"
+                          codePage="1252"
+                          dataType="str"
+                          length="350"
+                          name="sdn_Name" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[sdn_Type]"
+                          codePage="1252"
+                          dataType="str"
+                          length="12"
+                          name="sdn_Type" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[program]"
+                          codePage="1252"
+                          dataType="str"
+                          length="200"
+                          name="program" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[title]"
+                          codePage="1252"
+                          dataType="str"
+                          length="200"
+                          name="title" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[call_sign]"
+                          codePage="1252"
+                          dataType="str"
+                          length="8"
+                          name="call_sign" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[vess_type]"
+                          codePage="1252"
+                          dataType="str"
+                          length="25"
+                          name="vess_type" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[tonnage]"
+                          codePage="1252"
+                          dataType="str"
+                          length="14"
+                          name="tonnage" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[grt]"
+                          codePage="1252"
+                          dataType="str"
+                          length="8"
+                          name="grt" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[vess_flag]"
+                          codePage="1252"
+                          dataType="str"
+                          length="40"
+                          name="vess_flag" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[vess_owner]"
+                          codePage="1252"
+                          dataType="str"
+                          length="150"
+                          name="vess_owner" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].ExternalColumns[remarks]"
+                          codePage="1252"
+                          dataType="str"
+                          length="1000"
+                          name="remarks" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Error Output]"
+                      isErrorOut="true"
+                      name="Flat File Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[Flat File Source Error Output Column]"
+                          codePage="1252"
+                          dataType="text"
+                          description="Flat File Source Error Output Column"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[Flat File Source Error Output Column]"
+                          name="Flat File Source Error Output Column" />
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table"
+                  componentClassID="Microsoft.SSISODBCDst"
+                  contactInfo="ODBC Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+                  description="ODBC Destination"
+                  name="OFAC Table"
+                  usesDispositions="true"
+                  version="1">
+                  <properties>
+                    <property
+                      dataType="System.String"
+                      description="The name of the table to be fetched."
+                      expressionType="Notify"
+                      name="TableName">"public"."stg_ofac_sdn"</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specify the number of rows fetched per batch."
+                      expressionType="Notify"
+                      name="BatchSize">1000</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of rows inserted under the same transaction."
+                      expressionType="Notify"
+                      name="TransactionSize">1000</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Determines the chunk size allocation for LOB columns"
+                      expressionType="Notify"
+                      name="LobChunkSize">32768</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds to wait for an SQL statement to execute before returning to the application."
+                      expressionType="Notify"
+                      name="StatementTimeout">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The code page to use when code page information is unavailable from the data source."
+                      expressionType="Notify"
+                      name="DefaultCodePage">1252</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The method used for inserting data. Possible values are 'Batch' or 'Row by row'."
+                      expressionType="Notify"
+                      name="InsertMethod">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="The ODBC C data type for binding numeric data."
+                      expressionType="Notify"
+                      name="BindNumericAs">0</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Determines how the component would bind columns of (multi)-byte string types (i.e., SQL_CHAR, SQL_VARCHAR, SQL_LONGVARCHAR). The options are: Unicode (SQL_C_WCHAR) and ANSI (SQL_C_CHAR)."
+                      expressionType="Notify"
+                      name="BindCharColumnsAs">0</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Connections[ODBCConnection]"
+                      connectionManagerID="{594C551A-C34F-4954-A1AE-62D2226FDB00}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[PSQL ODBC 64]"
+                      description="The ODBC runtime connection used to access the database."
+                      name="ODBCConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="ODBC Destination Input"
+                      truncationRowDisposition="FailComponent">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[ent_num]"
+                          cachedDataType="i4"
+                          cachedName="ent_num"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[ent_num]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[ent_num]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[sdn_Name]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="350"
+                          cachedName="sdn_Name"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[sdn_name]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[sdn_Name]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[sdn_Type]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="12"
+                          cachedName="sdn_Type"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[sdn_type]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[sdn_Type]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[program]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="200"
+                          cachedName="program"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[program]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[program]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[title]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="200"
+                          cachedName="title"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[title]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[title]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[call_sign]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="8"
+                          cachedName="call_sign"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[call_sign]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[call_sign]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[vess_type]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="25"
+                          cachedName="vess_type"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[vess_type]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[vess_type]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[tonnage]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="14"
+                          cachedName="tonnage"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[tonnage]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[tonnage]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[grt]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="8"
+                          cachedName="grt"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[grt]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[grt]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[vess_flag]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="40"
+                          cachedName="vess_flag"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[vess_flag]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[vess_flag]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[vess_owner]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="150"
+                          cachedName="vess_owner"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[vess_owner]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[vess_owner]" />
+                        <inputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].Columns[remarks]"
+                          cachedCodepage="1252"
+                          cachedDataType="str"
+                          cachedLength="1000"
+                          cachedName="remarks"
+                          externalMetadataColumnId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[remarks]"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output].Columns[remarks]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[ent_num]"
+                          dataType="i4"
+                          name="ent_num" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[sdn_name]"
+                          dataType="wstr"
+                          length="350"
+                          name="sdn_name" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[sdn_type]"
+                          dataType="wstr"
+                          length="12"
+                          name="sdn_type" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[program]"
+                          dataType="wstr"
+                          length="200"
+                          name="program" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[title]"
+                          dataType="wstr"
+                          length="200"
+                          name="title" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[call_sign]"
+                          dataType="wstr"
+                          length="8"
+                          name="call_sign" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[vess_type]"
+                          dataType="wstr"
+                          length="25"
+                          name="vess_type" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[tonnage]"
+                          dataType="wstr"
+                          length="14"
+                          name="tonnage" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[grt]"
+                          dataType="wstr"
+                          length="8"
+                          name="grt" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[vess_flag]"
+                          dataType="wstr"
+                          length="40"
+                          name="vess_flag" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[vess_owner]"
+                          dataType="wstr"
+                          length="150"
+                          name="vess_owner" />
+                        <externalMetadataColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input].ExternalColumns[remarks]"
+                          dataType="wstr"
+                          length="1000"
+                          name="remarks" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="ODBC Destination Error Output"
+                      synchronousInputId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Outputs[ODBC Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre.Paths[Flat File Source Output]"
+                  endId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table.Inputs[ODBC Destination Input]"
+                  name="Flat File Source Output"
+                  startId="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File.Outputs[Flat File Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate OFAC Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{67CC8696-1C42-452F-A027-802E1022A925}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate OFAC Table"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{594C551A-C34F-4954-A1AE-62D2226FDB00}"
+          SQLTask:SqlStatementSource="truncate table stg_ofac_sdn;&#xA;truncate table stg_ofac_add;&#xA;truncate table stg_ofac_alt;&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{01269E10-C3F1-4609-BC60-77F9FCA262D7}"
+      DTS:From="Package\Download OFAC CSV files from FTP"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Truncate OFAC Table" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{43730100-6178-4512-8D64-04CD6804591D}"
+      DTS:From="Package\Truncate OFAC Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Parallel Execution of data flow task" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="235.636363636364,41.8909090909091"
+          Id="Package\Download OFAC CSV files from FTP"
+          TopLeft="213.000014018268,262.000017243128" />
+        <NodeLayout
+          Size="172.8,41.8909090909091"
+          Id="Package\Truncate OFAC Table"
+          TopLeft="719.500046990815,269.500017374755" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="448.636377654632,286.695471854396">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="270.863669336183,0"
+              Start="0,0"
+              End="263.363669336183,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="263.363669336183,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="197.236363636364,41.8909090909091"
+          Id="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre"
+          TopLeft="5.5,5.5" />
+        <NodeLayout
+          Size="197.236363636364,41.8909090909091"
+          Id="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre"
+          TopLeft="235.500015137097,7.50000013162673" />
+        <NodeLayout
+          Size="194.618181818182,41.8909090909091"
+          Id="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre"
+          TopLeft="490.500031919531,6.39090244374881" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="690.327272727273,104.727272727273"
+          Size="690.327272727273,147.49090909091"
+          Id="Package\Parallel Execution of data flow task"
+          TopLeft="273.000017967076,38.0000025009117" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="805.900046990815,269.500017374755">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-187.736392660103,-84.0091057829342"
+              Start="0,0"
+              End="-187.736392660103,-76.5091057829342">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,-38.0045528914671" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,-38.0045528914671"
+                    Point2="0,-42.0045528914671"
+                    Point3="-4,-42.0045528914671" />
+                  <mssgle:LineSegment
+                    End="-183.736392660103,-42.0045528914671" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-183.736392660103,-42.0045528914671"
+                    Point2="-187.736392660103,-42.0045528914671"
+                    Point3="-187.736392660103,-46.0045528914671" />
+                  <mssgle:LineSegment
+                    End="-187.736392660103,-76.5091057829342" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="116.945454545455,41.8909090909091"
+          Id="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\CSV File"
+          TopLeft="214.000014084082,67.0000044095023" />
+        <NodeLayout
+          Size="132.654545454546,41.8909090909091"
+          Id="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table"
+          TopLeft="208.000013689201,163.000010727595" />
+        <EdgeLayout
+          Id="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre.Paths[Flat File Source Output]"
+          TopLeft="273.400013886641,108.890913500411">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,54.1090972271837"
+              Start="0,0"
+              End="0,46.6090972271837">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,46.6090972271837" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Parallel Execution of data flow task\OFAC SDN CSV to Postgre\OFAC Table">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="132.654545454546,41.8909090909091"
+          Id="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table"
+          TopLeft="205.000013491761,161.000010595968" />
+        <NodeLayout
+          Size="116.945454545455,41.8909090909091"
+          Id="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\CSV File"
+          TopLeft="214.000014084082,67.0000044095023" />
+        <EdgeLayout
+          Id="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre.Paths[Flat File Source Output]"
+          TopLeft="271.900013787922,108.890913500411">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,52.1090970955566"
+              Start="0,0"
+              End="0,44.6090970955566">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,44.6090970955566" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Parallel Execution of data flow task\OFAC ADD CSV to Postgre\OFAC Table">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="132.654545454546,41.8909090909091"
+          Id="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table"
+          TopLeft="206.000013557575,160.000010530155" />
+        <NodeLayout
+          Size="116.945454545455,41.8909090909091"
+          Id="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\CSV File"
+          TopLeft="214.000014084082,67.0000044095023" />
+        <EdgeLayout
+          Id="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre.Paths[Flat File Source Output]"
+          TopLeft="272.400013820828,108.890913500411">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,51.1090970297432"
+              Start="0,0"
+              End="0,43.6090970297432">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,43.6090970297432" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Parallel Execution of data flow task\OFAC ALT CSV to Postgre\OFAC Table">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
