@@ -10,13 +10,14 @@ This document provides a step-by-step guide on setting up an ETL pipeline that e
    2. Edit the `vsftpd` configuration file:
       ```bash
       sudo nano /etc/vsftpd.conf
-
+      ```
    Add the following lines to disable SSL (for SSIS to connect smoothly):
 
 
 ```bash
 force_local_logins_ssl=NO
 force_local_data_ssl=NO
+```
 
 ## 2. Build the SSIS ETL Pipeline
 
