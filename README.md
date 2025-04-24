@@ -31,7 +31,7 @@
 
 - Data is loaded into a PostgreSQL database and transformed data into merged final table for further use.
 
-    [Documentation for pipeline From FTP server to Postgre](https://github.com/Miraiumxdd/on-premise-data-pipeline-ml-deployment/tree/main/Extract%20Transform%20and%20Load%20through%20FTP)
+    [Documentation for pipeline From FTP server to Postgre](https://github.com/Miraiumxdd/on-premise-data-pipeline-ml-deployment/tree/main/ftptopostgre)
 
 
 
